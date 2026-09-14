@@ -11,7 +11,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const extractCss = new MiniCssExtractPlugin({
-  filename: "../css/[name].min.css",
+  filename: "css/[name].min.css",
 });
 
 module.exports = [
@@ -26,12 +26,12 @@ module.exports = [
       shaarli: [
         './assets/default/js/base.js',
         './assets/default/scss/shaarli.scss',
-      ].concat(glob.sync('./assets/default/img/*')),
+      ].concat(glob.sync('./assets/default/img/*', { dotRelative: true })),
       markdown: './assets/common/css/markdown.css',
     },
     output: {
-      filename: '[name].min.js',
-      path: path.resolve(__dirname, 'tpl/default/js/')
+      filename: 'js/[name].min.js',
+      path: path.resolve(__dirname, 'tpl/default/')
     },
     module: {
       rules: [
@@ -52,33 +52,38 @@ module.exports = [
           use: [
             {
               loader: MiniCssExtractPlugin.loader,
-              options: {
-                publicPath: 'tpl/default/css/',
-              },
             },
             'css-loader',
-            'sass-loader',
+            {
+              loader: 'sass-loader',
+              options: {
+                // Sass emits BOM for CSS with non-ASCII characters in production.
+                // PostCSS 8.5.24+ preserves BOMs, which breaks @font-face parsing.
+                // See: https://github.com/postcss/postcss/issues/2122
+                sassOptions: { charset: false },
+              },
+            },
           ],
         },
         {
           test: /\.(gif|png|jpe?g|svg|ico)$/i,
-          use: [
-            {
-              loader: 'file-loader',
-              options: {
-                name: '../img/[name].[ext]',
-                publicPath: 'tpl/default/img/',
-              }
-            }
-          ],
+          type: 'asset/resource',
+          generator: {
+            filename: 'img/[name][ext]'
+          }
+        },
+        {
+          test: /webfont\.svg$/,
+          type: 'asset/resource',
+          generator: {
+            filename: 'fonts/[name][ext]'
+          }
         },
         {
           test: /\.(eot|ttf|woff|woff2)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-          loader: 'file-loader',
-          options: {
-            name: '../fonts/[name].[ext]',
-            // do not add a publicPath here because it's already handled by CSS's publicPath
-            publicPath: '../default/',
+          type: 'asset/resource',
+          generator: {
+            filename: 'fonts/[name][ext]'
           }
         },
       ],
@@ -98,15 +103,15 @@ module.exports = [
         './assets/vintage/js/base.js',
         './assets/vintage/css/reset.css',
         './assets/vintage/css/shaarli.css',
-      ].concat(glob.sync('./assets/vintage/img/*')),
+      ].concat(glob.sync('./assets/vintage/img/*', { dotRelative: true })),
       markdown: './assets/common/css/markdown.css',
       thumbnails: './assets/common/js/thumbnails.js',
       metadata: './assets/common/js/metadata.js',
       thumbnails_update: './assets/common/js/thumbnails-update.js',
     },
     output: {
-      filename: '[name].min.js',
-      path: path.resolve(__dirname, 'tpl/vintage/js/')
+      filename: 'js/[name].min.js',
+      path: path.resolve(__dirname, 'tpl/vintage/')
     },
     module: {
       rules: [
@@ -127,26 +132,22 @@ module.exports = [
           use: [
             {
               loader: MiniCssExtractPlugin.loader,
-              options: {
-                publicPath: 'tpl/vintage/css/',
-              },
             },
             'css-loader',
-            'sass-loader',
+            {
+              loader: 'sass-loader',
+              options: {
+                sassOptions: { charset: false },
+              },
+            },
           ],
         },
         {
           test: /\.(gif|png|jpe?g|svg|ico)$/i,
-          use: [
-            {
-              loader: 'file-loader',
-              options: {
-                name: '../img/[name].[ext]',
-                // do not add a publicPath here because it's already handled by CSS's publicPath
-                publicPath: '../vintage',
-              }
-            }
-          ],
+          type: 'asset/resource',
+          generator: {
+            filename: 'img/[name][ext]'
+          }
         },
       ],
     },

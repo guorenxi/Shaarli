@@ -156,7 +156,13 @@ class NetscapeBookmarkUtils
                 $link->setUpdated(new DateTime());
                 $overwriteCount++;
             } else {
-                $newLinkDate = new DateTime('@' . $bkm['dateCreated']);
+                if (empty($bkm['dateCreated'])) {
+                    // Some browsers (e.g. Safari) export bookmarks without an
+                    // ADD_DATE attribute: fall back to the current date/time.
+                    $newLinkDate = new DateTime();
+                } else {
+                    $newLinkDate = new DateTime('@' . $bkm['dateCreated']);
+                }
                 $newLinkDate->setTimezone(new DateTimeZone(date_default_timezone_get()));
                 $link->setCreated($newLinkDate);
             }
@@ -210,7 +216,7 @@ class NetscapeBookmarkUtils
         $skipCount = 0,
         $duration = 0
     ) {
-        $status = sprintf(t('File %s (%d bytes) '), $filename, $filesize);
+        $status = sprintf(t('File %s (%d bytes) '), escape($filename), $filesize);
         if ($importCount == 0 && $overwriteCount == 0 && $skipCount == 0) {
             $status .= t('has an unknown file format. Nothing was imported.');
         } else {

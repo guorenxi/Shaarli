@@ -12,7 +12,10 @@
     "config": {
         "sort-packages": true,
         "platform": {
-            "php": "7.4.33"
+            "php": "8.2"
+        },
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
     "require": {
@@ -30,9 +33,11 @@
         "slim/slim": "^3.0"
     },
     "require-dev": {
+        "phpunit/php-text-template": "^2.0",
+        "phpunit/phpunit": "^9.0",
         "roave/security-advisories": "dev-master",
-        "squizlabs/php_codesniffer": "^3.0",
-        "phpunit/phpunit": "^9.0"
+        "slevomat/coding-standard": "~8.0",
+        "squizlabs/php_codesniffer": "^4.0"
     },
     "suggest": {
         "ext-curl": "Allows fetching web pages and thumbnails in a more robust way",

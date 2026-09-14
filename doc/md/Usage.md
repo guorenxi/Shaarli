@@ -49,7 +49,7 @@ Sticky-ing a Shaare does not bypass active filters/search terms.
 
 ### Permalinks
 
-Permalinks are fixed, short links attached to each Shaare. Editing a Shaare will not change it's permalink, each permalink always points to the latest revision of a Shaare.
+Permalinks are fixed, short links attached to each Shaare. Editing a Shaare will not change its permalink, each permalink always points to the latest revision of a Shaare.
 
 
 ### Text-only (note) Shaares
@@ -70,6 +70,8 @@ Shaarli can be used as a minimal blog, notepad, pastebin...: While adding or edi
 Both exclude patterns and exact searches can be combined with normal searches (example `"exact search" term otherterm -notthis "very exact" stuff -notagain`). Only AND (and NOT) text search is currently supported.
 
 Active search terms are displayed on top of the link list. To remove terms/tags from the current search, click the `x` next to any of them, or simply clear text/tag search fields.
+
+Shaarli's search can be added to your Web browser's search engines by clicking the `+` Shaarli icon in your browser's search engine selector ([example for Firefox](https://support.mozilla.org/en-US/kb/add-or-remove-search-engine-firefox#w_add-a-search-engine-from-the-search-bar)).
 
 
 ### Tag cloud

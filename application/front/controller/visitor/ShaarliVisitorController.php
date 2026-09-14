@@ -61,6 +61,7 @@ abstract class ShaarliVisitorController
         $this->assignView('template', $template);
 
         $this->assignView('linkcount', $this->container->bookmarkService->count(BookmarkFilter::$ALL));
+        $this->assignView('publicLinkcount', $this->container->bookmarkService->count(BookmarkFilter::$PUBLIC));
         $this->assignView('privateLinkcount', $this->container->bookmarkService->count(BookmarkFilter::$PRIVATE));
 
         $this->executeDefaultHooks($template);
@@ -95,7 +96,7 @@ abstract class ShaarliVisitorController
         }
     }
 
-    protected function executePageHooks(string $hook, array &$data, string $template = null): void
+    protected function executePageHooks(string $hook, array &$data, ?string $template = null): void
     {
         $this->container->pluginManager->executeHooks(
             $hook,
@@ -140,7 +141,7 @@ abstract class ShaarliVisitorController
         Response $response,
         array $loopTerms = [],
         array $clearParams = [],
-        string $anchor = null
+        ?string $anchor = null
     ): Response {
         $defaultPath = $this->container->basePath . '/';
         $referer = $this->container->environment['HTTP_REFERER'] ?? null;
